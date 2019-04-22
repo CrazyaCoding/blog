@@ -1,657 +1,463 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
- <title>Jekyll Jacman</title>
- <link href="http://localhost:4000/atom.xml" rel="self"/>
+ <title>panpan Shang</title>
+ <link href="http://localhost:4000" rel="self"/>
  <link href="http://localhost:4000"/>
- <updated>2019-04-19T14:40:42+08:00</updated>
+ <updated>2019-04-22T10:05:19+08:00</updated>
  <id>http://localhost:4000</id>
  <author>
-   <name>yitao</name>
+   <name>shangpanpan</name>
    <email></email>
  </author>
 
  
  <entry>
-   <title>如何使用 Jacman 主题</title>
-   <link href="http://localhost:4000/jekyll/2015/09/20/how-to-use-jacman/"/>
-   <updated>2015-09-20T00:00:00+08:00</updated>
-   <id>http://localhost:4000/jekyll/2015/09/20/how-to-use-jacman</id>
-   <content type="html">&lt;h2 id=&quot;主题介绍&quot;&gt;主题介绍&lt;/h2&gt;
-&lt;p&gt;Jekyll-Jacman 是为 &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll&lt;/a&gt; 设计的一款清新且具有响应式的主题，拥有更丰富的特性并支持了很多的国内服务。Jacman 始于 &lt;a href=&quot;https://github.com/wuchong/jacman&quot;&gt;Jacman&lt;/a&gt; 移植而来。&lt;/p&gt;
+   <title>Javascript是单线程</title>
+   <link href="http://localhost:4000/%E6%B5%8F%E8%A7%88%E5%99%A8/2019/04/19/%E5%8D%95%E7%BA%BF%E7%A8%8B/"/>
+   <updated>2019-04-19T00:00:00+08:00</updated>
+   <id>http://localhost:4000/%E6%B5%8F%E8%A7%88%E5%99%A8/2019/04/19/单线程</id>
+   <content type="html">&lt;h2 id=&quot;javascript是单线程&quot;&gt;Javascript是单线程&lt;/h2&gt;
+&lt;p&gt;Javascript引擎是单线程运行的，浏览器在什么时候，都且只有一个线程在运行javascript&lt;/p&gt;
 
-&lt;!-- more --&gt;
+&lt;p&gt;浏览器的内核是多线程的，它们在内核控制下相互配合以保持同步，一个浏览器至少实现三个常驻引擎：&lt;code class=&quot;highlighter-rouge&quot;&gt;javascript引擎线程&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;GUI渲染线程&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;浏览器事件触发线程&lt;/code&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;配置指南&quot;&gt;配置指南&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;javascript引擎线程：是基于事件驱动单线程执行的，javascript引擎一直等待着任务队列中任务的到来，&lt;/li&gt;
+  &lt;li&gt;GUI渲染线程：负责渲染浏览器界面，当界面需要重绘（Repaint）或者由于某种操作引发回流时，该线程就会执行。需要注意的是GUI与上面javascript引擎是互斥的，当javascript引擎执行时GUI线程就会被挂起，GUI更新会被保存在一个队列中，等到javascript引擎空闲时立即执行。&lt;/li&gt;
+  &lt;li&gt;事件触发线程：当一个事件被触发时该线程会把事件添加到待处理队列的队尾，等待javascript引擎的处理，事件可以是setTimeout、ajax，也可来自浏览器内核的其他线程的鼠标点击，ajax异步请求等，所有这些事件都得排队等待javascript引擎处理&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;Jacman 主题提供了丰富的配置属性，可以实现您对主题的自定义。配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;位于主题根目录下。本次更新对配置文件进行了较大调整，如您之前就使用了 Jacman，也需要您根据以下指南进行相应的修改。&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>promise的深入学习</title>
+   <link href="http://localhost:4000/js/2019/04/19/promise/"/>
+   <updated>2019-04-19T00:00:00+08:00</updated>
+   <id>http://localhost:4000/js/2019/04/19/promise</id>
+   <content type="html">&lt;h2 id=&quot;为什么会产生promise&quot;&gt;为什么会产生promise&lt;/h2&gt;
+&lt;p&gt;目前，我们对于异步函数的处理均是来源于回调函数，与普通函数不同的是，回调函数的内容是异步操作完成后的后续逻辑，并被第三方调用&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##### 菜单
-menu:
-  主页: /
-  归档: /archives
-  关于: /about
+&lt;p&gt;以ajax为例子&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ajax.get('xxx', dataA =&amp;gt; {
+    ajax.get('yyy', dataB =&amp;gt; {
+        //handle
+    })
+})
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;这样一来，在处理越来越多的异步逻辑时，回调也就越深
+会产生如下几个问题：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;代码逻辑书写顺序与执行顺序不一致，不利于阅读与维护&lt;/li&gt;
+  &lt;li&gt;异步操作的顺序变更时，需要大规模的代码重构&lt;/li&gt;
+  &lt;li&gt;回掉函数基本都是匿名函数，bug追踪困难&lt;/li&gt;
+  &lt;li&gt;回调函数是被第三方库代码调用，而非自己的业务代码所调用，造成了控制反转&lt;/li&gt;
+&lt;/ul&gt;
 
-#### 控件
-widgets: 
-- category
-- tag
-- links
-- rss
+&lt;p&gt;其中，最后一个问题是编码中的最大的问题，由于回掉函数是被第三方库调用的，因此无法预期自己被执行时的环境，可能会导致：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;回调被执行了多次&lt;/li&gt;
+  &lt;li&gt;回调一次都没有被执行&lt;/li&gt;
+  &lt;li&gt;回调不是异步执行而是被同步执行&lt;/li&gt;
+  &lt;li&gt;回调被过早执行或过晚执行&lt;/li&gt;
+  &lt;li&gt;回调中的报错被第三方吞噬掉&lt;/li&gt;
+&lt;/ul&gt;
 
-#### RSS 
-rss: /atom.xml 
-
-#### 图片相关
-imglogo:
-  enable: true               ## 是否显示网站 logo
-  src: img/logo.png        
-favicon: img/favicon.ico     ## 网站图标    
-apple_icon: img/jacman.jpg   ## 苹果设备上的图标，背景不要透明
-author_img: img/author.jpg   ## 网站底部的博主头像
-banner_img: img/banner.jpg   ## 博客顶部的图片
-
-close_aside: false      ##是否在文章页面自动关闭侧边栏
-
-#### 首页相关
-index:
-  expand: true              ## 首页文章是否展开。默认为展开式，显示 Read More。
-  excerpt_link: Read More    
-
-#### 作者信息
-author:
-  name: ## 作者名
-  intro_line1:  &quot;Hello ,I'm Larry Page in Google.&quot;    ## 网站底部的个人介绍
-  intro_line2:  &quot;This is my blog,believe it or not.&quot;  
-  weibo_verifier:  ## 微博秀的验证码
-  tsina:           ## 用于微博秀和微博分享
-  weibo:           ## 用于显示网站底部社交按钮，下同
-  douban:         
-  zhihu:  
-  email:     
-  twitter:   
-  github:     
-  facebook: 
-  linkedin:   
-  google_plus:   
-  stackoverflow:  
-
-
-#### 目录
-toc:
-  article: true   ## 是否在文章中显示目录
-  aside: true     ## 是否在侧边栏显示目录
-
-#### 友情链接
-links:
-  码农圈: https://coderq.com,一个面向程序员交流分享的新一代社区
-  Jark's Blog: http://wuchong.me
-  
-#### 评论
-duoshuo_shortname: 
-disqus_shortname:  
-
-#### 分享按钮
-jiathis:
-  enable: false   ## 默认使用主题内建分享
-  id:    
-  tsina: 
-  
-#### 网站统计
-google_analytics:
-  enable: false
-  id:            ## google analytics ID.
-  site:          ## 网站地址.
-baidu_tongji:
-  enable: false
-  sitecode:      ## 百度统计站点特征码
-cnzz_tongji:
-  enable: false
-  siteid:        ## CNZZ统计站点ID
-
-#### 杂项
-ShowCustomFont: true  
-fancybox: true        
-totop: true           
-
-#### 自定义搜索
-google_cse: 
-  enable: false
-  cx:  
-baidu_search:    
-  enable: false
-  id:   
-  site: http://zhannei.baidu.com/cse/search 
-tinysou_search:     ## http://tinysou.com/
-  enable: false
-  id: &quot;4ac092ad8d749fdc6293&quot; 
+&lt;p&gt;以上述为例，基于promise的例子是这样的&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    function getDataA(){
+        return new Promise((resolve, reject) =&amp;gt; {
+            ajax.get('xxx', dataA =&amp;gt; {
+                resolve(dataA)
+            })
+        })
+    }
+    function getDataB(dataA){
+        return new Promise((resolve, reject) =&amp;gt; {
+            ajax.get('xxx'+dataA, dataB =&amp;gt; {
+                resolve(dataB)
+            })
+    }
+    getDataA()
+    .then(dataA =&amp;gt; {getDataB(dataA)})
+    .then(dataB =&amp;gt; console.log(dataB))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;基础概念&quot;&gt;基础概念&lt;/h2&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;在上面的例子中，其实promise充当了一个中间机的作用，将回调造成的控制反转再反转回去。
+在promise的例子中，控制流分成了两个部分，触发异步钱的逻辑通过new传入promise，而异步操作完成后的逻辑则传入promise的then接口中，通过这种方式，第一方业务和第三方库的响应逻辑都由primise来调用，进而在promise中解决异步变成可能出现 ## API 一个promise有以下几种状态 * pending: 初始状态，成功或失败状态 * fulfilled: 意味这操作成功完成 * rejected: 意味着操作失败
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;属性功能&quot;&gt;属性功能&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;菜单 menu&lt;/strong&gt;
-默认没有启用 &lt;code class=&quot;highlighter-rouge&quot;&gt;/tags&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;/categories&lt;/code&gt;页面，如果需要启用请在博客目录下分别建立&lt;code class=&quot;highlighter-rouge&quot;&gt;tags&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;categories&lt;/code&gt;文件夹每个文件夹中分别包含一个&lt;code class=&quot;highlighter-rouge&quot;&gt;index.md&lt;/code&gt;文件。内容为：&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&quot;https://mdn.mozillademos.org/files/8633/promises.png&quot;&gt;看这样一张图&lt;/a&gt;
+&lt;img src=&quot;https://mdn.mozillademos.org/files/8633/promises.png&quot; alt=&quot;promise&quot; /&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;layout: tags (或categories)
-title: tags (或categories)
----
+&lt;h3 id=&quot;属性&quot;&gt;属性&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Promise.length&lt;/code&gt; length属性，其值总是为1（构造器参数的数目）
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Promise.prototype&lt;/code&gt; 表示Promise构造器的原型&lt;/p&gt;
+
+&lt;h3 id=&quot;方法&quot;&gt;方法&lt;/h3&gt;
+
+&lt;h4 id=&quot;promisealliterable&quot;&gt;Promise.all(iterable)&lt;/h4&gt;
+&lt;p&gt;用于将多个Promise实例，包装成一个新的Promise实例&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const p = Promise.all([p1, p2, p3]);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Promise.all方法接受一个数组作为参数，p1, p2, p3都是Promise实例，如果不是，就会调用Promise.resolve方法，转为Promise实例，再进一步处理。（Promise.all方法的参数可以不是数组，但必须具有Iterator接口，且返回的每个成员都是Promise实例）
+p的状态由p1,p2,p3决定，分两种情况
+1. 只有p1, p2, p3的状态都变成fulfilled, p的状态才会变成fulfilled，此时，p1, p2, p3的返回值组成一个数组，传递给p的回调函数
+2. 只要p1, p2, p3之中有一个被rejected，p的状态就变成rejected，此时，第一个被reject的实例的返回值，会传递给p的回掉函数
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;      因为主题中已经内置了这两个页面的模板，所以他们会被正确的解析出来。&lt;/p&gt;
+&lt;p&gt;例子见：./demo/promise.all.1.js&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;控件 widgets&lt;/strong&gt;
-提供了7种小工具。包括标签、分类、RSS、友情链接、微博秀。&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;如果作为参数的Promise实例，自己定义了catch方法，那么它一旦被rejected，就不会触发Promise.all的catch方法
+见：./demo/promise.all.2.js&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;友情链接&lt;/strong&gt;：友情链接的网址添加可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt;属性下添加。&lt;/p&gt;
+&lt;h4 id=&quot;promiseraceiterable&quot;&gt;Promise.race(iterable)&lt;/h4&gt;
+&lt;p&gt;该方法同样是将多个Promise实例，包装成一个新的Promise实例&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const p = new Promise.race([p1, p2, p3]);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;那么上面代码中，只要p1,p2,p3之中有一个实例率先改变状态，p的状态就跟着改变，那个率先改变状态的promise的返回值，就作为参数传递给p的回掉函数
+如果参数不是Promise的实例，就会调用Promise.resolve方法，转为Promise实例
+见Promise.race.js&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;微博秀&lt;/strong&gt;：需要注意的是，如果要启用微博秀，您必须填上&lt;code class=&quot;highlighter-rouge&quot;&gt;author&lt;/code&gt;属性下&lt;code class=&quot;highlighter-rouge&quot;&gt;tsina&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;weibo_verifier&lt;/code&gt;的值，前者是您微博ID，后者是您微博秀的验证码，访问 http://app.weibo.com/tool/weiboshow 在如下图位置，可以获得您的 verifier，如：我的是&lt;code class=&quot;highlighter-rouge&quot;&gt;b3593ceb&lt;/code&gt;。
-&lt;img src=&quot;http://ww1.sinaimg.cn/large/81b78497jw1emegd6b0ytj209204pweu.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;如果要关闭侧边栏，将&lt;code class=&quot;highlighter-rouge&quot;&gt;close_aside&lt;/code&gt;置为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;，就会在博文页面自动关闭侧边栏。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;图片相关 Image&lt;/strong&gt;
-本主题可以设置网站相关图片，例如网站图标（&lt;code class=&quot;highlighter-rouge&quot;&gt;favicon&lt;/code&gt;）、网站logo（&lt;code class=&quot;highlighter-rouge&quot;&gt;imglogo&lt;/code&gt;）、作者头像（&lt;code class=&quot;highlighter-rouge&quot;&gt;author_img&lt;/code&gt;）。建议启用网站logo，格式建议为&lt;code class=&quot;highlighter-rouge&quot;&gt;.svg&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;.png&lt;/code&gt;格式。同时建议提供配套的 favicon 以及在苹果设备上的图标&lt;code class=&quot;highlighter-rouge&quot;&gt;apple_icon&lt;/code&gt;（背景不要透明）。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;首页显示模式 Index&lt;/strong&gt;
-目前首页的显示模式支持两种，一种是原先的卡片式（前往 &lt;a href=&quot;http://wuchong.me/jacman&quot;&gt;Demo&lt;/a&gt; 预览），另一种是类似官方主题的文章展开式（&lt;a href=&quot;http://wuchong.me&quot;&gt;本站&lt;/a&gt;即采用的这种）。两者各有优劣，前者首页加载速度更快，后者文章内容更能吸引读者。主题默认采用后一种展开式，如需开启第一种卡片式，请设置&lt;code class=&quot;highlighter-rouge&quot;&gt;index&lt;/code&gt;属性下的&lt;code class=&quot;highlighter-rouge&quot;&gt;expand: false&lt;/code&gt;。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;卡片式的文章摘要是截取文章内容的前140个字，也可以自己总结&lt;code class=&quot;highlighter-rouge&quot;&gt;description&lt;/code&gt;并将其放在开头的&lt;code class=&quot;highlighter-rouge&quot;&gt;front-matter&lt;/code&gt;中。展开式的文章摘要就是使用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;!-- more --&amp;gt;&lt;/code&gt;截取了。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;作者信息 author&lt;/strong&gt;
-作者信息，建议尽量填写完整。其中&lt;code class=&quot;highlighter-rouge&quot;&gt;tsina&lt;/code&gt;是你的新浪微博ID，不同于用户名或微博主页地址。启用这个属性后，其他用户在微博上分享你文章的同时会自动@你。同时它和&lt;code class=&quot;highlighter-rouge&quot;&gt;weibo_verifier&lt;/code&gt;一起作用生成微博秀。&lt;code class=&quot;highlighter-rouge&quot;&gt;intro_line1&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;intro_line2&lt;/code&gt;是网站底部的个人介绍。&lt;code class=&quot;highlighter-rouge&quot;&gt;weibo&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;twitter&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;facebook&lt;/code&gt;等是用来显示网站右下角的社交按钮的，如下图所示。
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/81b78497jw1emgscr3575j2078050jrc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;目录 toc&lt;/strong&gt;
-是否启用在文章中或侧边栏中的目录功能。二者可以都为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;或都为&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;。同时，如果你希望在特定的某一篇文章中关闭目录功能你可以在文章文件开头中的&lt;code class=&quot;highlighter-rouge&quot;&gt;front-matter&lt;/code&gt;中加上一行&lt;code class=&quot;highlighter-rouge&quot;&gt;toc: false&lt;/code&gt;。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;评论 comments&lt;/strong&gt;
-填写&lt;code class=&quot;highlighter-rouge&quot;&gt;duoshuo_shortname&lt;/code&gt;&lt;a href=&quot;http://duoshuo.com/&quot;&gt;多说&lt;/a&gt;的用户名，启用多说评论系统。在大陆地区更好用的评论系统。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;填写&lt;code class=&quot;highlighter-rouge&quot;&gt;disqus_shortname&lt;/code&gt;&lt;a href=&quot;http://disqus.com/&quot;&gt;disqus&lt;/a&gt; 的用户名，启用 disqus 评论系统。国际上更广泛使用的评论系统。设置博客根目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;文件中的&lt;code class=&quot;highlighter-rouge&quot;&gt;disqus_shortname&lt;/code&gt;同样也能开启该功能。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;加网分享 jiathis&lt;/strong&gt;
-&lt;a href=&quot;http://www.jiathis.com/&quot;&gt;加网&lt;/a&gt;分享系统。默认关闭，因为主题已经内置了原生的分享功能。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;网站统计 Analytics&lt;/strong&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;google_analytics&lt;/code&gt;：Google Analytics追踪代码。请注意：Google Analytics已经升级到了Universal Analytics。请先前往后台升级你的Google Analytics版本后再启用追踪代码，更多信息请&lt;a href=&quot;https://developers.google.com/analytics/devguides/collection/upgrade/?hl=zh_CN&quot;&gt;点击这里&lt;/a&gt;了解。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;baidu_tongji&lt;/code&gt;：百度统计功能。需要填写站点特征码&lt;code class=&quot;highlighter-rouge&quot;&gt;sitecode&lt;/code&gt;，在&lt;a href=&quot;http://tongji.baidu.com/web/welcome/login&quot;&gt;官网&lt;/a&gt;注册并配置站点后，获取特征码。特征码可以在「网站中心」-&amp;gt; 「代码获取」中查看，如下图所示的&lt;code class=&quot;highlighter-rouge&quot;&gt;e6d1f421bbc9962127a50488f9ed37d1&lt;/code&gt;，注意去掉前面的&lt;code class=&quot;highlighter-rouge&quot;&gt;3F&lt;/code&gt;。
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/81b78497jw1emf4v6qf91j20kf07sq8v.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cnzz_tongji&lt;/code&gt;：站长统计功能。需要填写站点ID&lt;code class=&quot;highlighter-rouge&quot;&gt;siteid&lt;/code&gt;，同理在&lt;a href=&quot;http://www.cnzz.com&quot;&gt;站长官网&lt;/a&gt;注册并配置站点后获得。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;数学公式 mathjax&lt;/strong&gt;
-主题支持写 LaTex 数学公式。只需要在文章文件开头的&lt;code class=&quot;highlighter-rouge&quot;&gt;front-matter&lt;/code&gt;中，加上一行&lt;code class=&quot;highlighter-rouge&quot;&gt;mathjax: true&lt;/code&gt;，即可在文中写 LaTex 公式。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;图片浏览 fancybox&lt;/strong&gt;
-默认关闭，如果你经常发表 Gallery 类型的文章，那么请设置为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;返回顶部 totop&lt;/strong&gt;
-右下角&lt;code class=&quot;highlighter-rouge&quot;&gt;返回顶部&lt;/code&gt;按钮，默认开启。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;自定义搜索 Search&lt;/strong&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;baidu_search&lt;/code&gt;：如果开启百度站内搜索需要登录 &lt;a href=&quot;http://zn.baidu.com/&quot;&gt;百度站内搜索&lt;/a&gt;，配置好你的站点，并开启站内搜索获取搜索ID，另外&lt;code class=&quot;highlighter-rouge&quot;&gt;site&lt;/code&gt;属性可以填默认值，也可以填自己做了CNAME的二级域名，更详细的可以阅读&lt;a href=&quot;http://gengbiao.me/hexo/hexo%E6%B7%BB%E5%8A%A0%E7%99%BE%E5%BA%A6%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2/&quot;&gt;这篇博客&lt;/a&gt;了解。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;google_cse&lt;/code&gt;：如果开启谷歌自定义搜索需要先登录 &lt;a href=&quot;https://www.google.com/cse/&quot;&gt;Google CSE&lt;/a&gt;，配置好你的站点，并获得此自定义搜索的ID。此外你需要在博客目录下建立&lt;code class=&quot;highlighter-rouge&quot;&gt;search&lt;/code&gt;文件夹并包含一个&lt;code class=&quot;highlighter-rouge&quot;&gt;index.md&lt;/code&gt;文件。内容为：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; layout: search
- title: search
- ---
+&lt;h4 id=&quot;promiseresolve&quot;&gt;Promise.resolve()&lt;/h4&gt;
+&lt;p&gt;有时需要将现有对象转为Promise对象，该方法就起到这个作用&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const jsPromise = Promise.resolve($.ajax('./whatever.json'))
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;tiny_search&lt;/code&gt;: 如果要开启&lt;a href=&quot;http://tinysou.com/&quot;&gt;微搜索&lt;/a&gt;，需要先注册一个帐号，配置一个Engine，将Engine的Key填入配置文件中的&lt;code class=&quot;highlighter-rouge&quot;&gt;id&lt;/code&gt;即可。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Promise.resolve('foo');
+// 等价于
+new Promise(resolve =&amp;gt; resolve('foo'))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Promise.resolve的参数分成四种情况
+（1）参数是一个promise实例
+    如果参数本身就是Promise实例，那么Promise.resolve将不做任何修改，直接返回实例
+（2）参数是一个thenable对象
+    thenable对象值的就是具有then方法的对象
+    let thenable = {
+        then: function(resolve){
+            resolve(1);
+        }
+    }
+    let p1 = Promise.resolve(thenable); //会转换完并执行then方法后在返回
+    p1.then(function(value){
+        console.log(value);  //1
+    })
+    
+（3）参数不是具有then方法的对象，或根本不是对象
+    const p = Promise.resolve('hello');
+    p.then(function(e){
+        console.log(e); //hello
+    })
 
-&lt;h2 id=&quot;常见问题&quot;&gt;常见问题&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Q：图片默认都是居左的，我怎么设置能让图片居中呢？&lt;/strong&gt;&lt;/p&gt;
+(4) 不带有任何参数
+    直接返回一个Promise对象，但是需要注意的是，即使是立即执行的，也会排在当前的事件队列后面，是在本轮&quot;事件循环&quot;（event loop）结束时，而不是在下一轮&quot;事件循环&quot;的开始时。
+    setTimeout(function(){
+        console.log('3');
+    }, 0);
+    Promise.resolve().then(function(){
+        console.log(2);
+    });
+    console.log(1);
+    // 1
+    // 2
+    // 3
+    setTimeout(fn, 0)在下一轮&quot;事件循环&quot;开始时执行，
+    Promise.resolve()在本轮 &quot;事件循环&quot; 结束时开始执行
+    console.log('1') 时立即执行
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-    &lt;blockquote&gt;
-      &lt;p&gt;使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;img src=&quot;&quot; style=&quot;display:block;margin:auto&quot;/&amp;gt;&lt;/code&gt;的HTML标签。&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Q：如何建立一篇图片类文章（Gallery Post）？&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;promiserejected&quot;&gt;Promise.rejected()&lt;/h4&gt;
+&lt;p&gt;Promise.rejected方法也会返沪一个新的Promise实例，该实例的状态为rejected&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const p = new Promise.rejected('出错了')
+// 等价于
+const p = new Promise((resolve, rejected) =&amp;gt; rejected('出错了'))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;那么，Promise.rejected()方法的参数，会原封不动的作为reject的理由，变成后续的参数，这一点与Promise.resolve不一致&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const thenable = {
+    then: function(resolve, reject){
+        reject('出错了');
+    }
+}
 
-    &lt;blockquote&gt;
-      &lt;p&gt;直接新建一个 Markdown 文件，将其&lt;code class=&quot;highlighter-rouge&quot;&gt;front-matter&lt;/code&gt;修改为如下，即可看到主题为图片类文章提供的样式。&lt;/p&gt;
+Promise.reject(thenable).cathch(e =&amp;gt; {
+    console.log(e === thenable); //true
+})
 
-      &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;---
-layout: photo
-title: Gallery Post
-photos:
-- http://i.minus.com/ibobbTlfxZgITW.jpg
-- http://i.minus.com/iedpg90Y0exFS.jpg
----
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;      &lt;/div&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Q：我在配置文件中给某一项设置了值，但为什么总是看不到效果啊？&lt;/strong&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-    &lt;blockquote&gt;
-      &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;文件中的每个属性值前面必须留一个空格，建议在 Sublime/Notepad++ 中开启显示所有空格模式。另每篇文章的 &lt;code class=&quot;highlighter-rouge&quot;&gt;front-matter&lt;/code&gt; 也要注意这个问题。&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Q：怎么提意见和建议？&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;源码重写&quot;&gt;源码重写&lt;/h2&gt;
 
-    &lt;blockquote&gt;
-      &lt;p&gt;主题还在不断完善中，欢迎 &lt;a href=&quot;https://github.com/Simpleyyt/jekyll-jacman/issues&quot;&gt;open issue&lt;/a&gt; 来提建议，参与讨论。&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Q：为什么我修改了配置文件/发表了博文，解析出来的却是乱码呢？&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;blockquote&gt;
-      &lt;p&gt;请将你的配置文件/markdown文件保存成 &lt;code class=&quot;highlighter-rouge&quot;&gt;UTF-8&lt;/code&gt; 格式。&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Q：为什么开启了微博秀后，显示是空白的，没有内容展示？&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;blockquote&gt;
-      &lt;p&gt;每次修改参数都会这样，需要多刷新几次或者上传到服务器上就好了。&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+&lt;h2 id=&quot;参考&quot;&gt;参考&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://ewind.us/2017/promise-implementing/&quot;&gt;promise源码阅读&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
-   <title>Emoji Test</title>
-   <link href="http://localhost:4000/2015/09/19/emoji-test/"/>
-   <updated>2015-09-19T00:00:00+08:00</updated>
-   <id>http://localhost:4000/2015/09/19/emoji-test</id>
-   <content type="html">&lt;p&gt;This is an emoji test. :smile:&lt;/p&gt;
-
-&lt;p&gt;:bowtie::smile::laughing::blush::smiley::relaxed::smirk:
-:heart_eyes::kissing_heart::kissing_closed_eyes::flushed::relieved::satisfied::grin:&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Gallery Post</title>
-   <link href="http://localhost:4000/photo/2014/11/18/gallery-post/"/>
-   <updated>2014-11-18T23:45:20+08:00</updated>
-   <id>http://localhost:4000/photo/2014/11/18/gallery-post</id>
-   <content type="html">&lt;p&gt;Nunc dignissim volutpat enim, non sollicitudin purus dignissim id. Nam sit amet urna eu velit lacinia eleifend. Proin auctor rhoncus ligula nec aliquet. Donec sodales molestie lacinia. Curabitur dictum faucibus urna at convallis. Aliquam in lectus at urna rutrum porta. In lacus arcu, molestie ut vestibulum ut, rhoncus sed eros. Sed et elit vitae risus pretium consectetur vel in mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tempus turpis quis lectus rhoncus adipiscing. Proin pulvinar placerat suscipit. Maecenas imperdiet, quam vitae varius auctor, enim mauris vulputate sapien, nec laoreet neque diam non quam.&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/81b78497jw1emfgts2pt4j21hc0u0k1c.jpg&quot; alt=&quot;Wallbase - dgnfly (wallbase.cc/wallpaper/1384450)&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Etiam luctus mauris at mi sollicitudin quis malesuada nibh porttitor. Vestibulum non dapibus magna. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin feugiat hendrerit viverra. Phasellus sit amet nunc mauris, eu ultricies tellus. Sed a mi tortor, eleifend varius erat. Proin consectetur molestie tortor eu gravida. Cras placerat orci id arcu tristique ut rutrum justo pulvinar. Maecenas lacinia fringilla diam non bibendum. Aenean vel viverra turpis. Integer ut leo nisi. Pellentesque vehicula quam ut sapien convallis consequat. Aliquam ut arcu purus, eget tempor purus. Integer eu tellus quis erat tristique gravida eu vel lorem.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>MathJax with Jekyll</title>
-   <link href="http://localhost:4000/opinion/2014/02/16/Mathjax-with-jekyll/"/>
-   <updated>2014-02-16T00:00:00+08:00</updated>
-   <id>http://localhost:4000/opinion/2014/02/16/Mathjax-with-jekyll</id>
-   <content type="html">&lt;p&gt;One of the rewards of switching my website to &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; is the
-ability to support &lt;strong&gt;MathJax&lt;/strong&gt;, which means I can write LaTeX-like equations that get
-nicely displayed in a web browser, like this one \( \sqrt{\frac{n!}{k!(n-k)!}} \) or
-this one \( x^2 + y^2 = r^2 \).&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;p&gt;&lt;img class=&quot;centered&quot; src=&quot;https://www.mathjax.org/badge/mj-logo.svg&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;whats-mathjax&quot;&gt;What’s MathJax?&lt;/h3&gt;
-
-&lt;p&gt;If you check MathJax website &lt;a href=&quot;http://www.mathjax.org/&quot;&gt;(www.mathjax.org)&lt;/a&gt; you’ll see
-that it &lt;em&gt;is an open source JavaScript display engine for mathematics that works in all
-browsers&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;how-to-implement-mathjax-with-jekyll&quot;&gt;How to implement MathJax with Jekyll&lt;/h3&gt;
-
-&lt;p&gt;I followed the instructions described by Dason Kurkiewicz for
-&lt;a href=&quot;http://dasonk.github.io/blog/2012/10/09/Using-Jekyll-and-Mathjax/&quot;&gt;using Jekyll and Mathjax&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here are some important details. I had to modify the Ruby library for Markdown in
-my &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; file. Now I’m using redcarpet so the corresponding line in the
-configuration file is: &lt;code class=&quot;highlighter-rouge&quot;&gt;markdown: redcarpet&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;To load the MathJax javascript, I added the following lines in my layout &lt;code class=&quot;highlighter-rouge&quot;&gt;page.html&lt;/code&gt;
-(located in my folder &lt;code class=&quot;highlighter-rouge&quot;&gt;_layouts&lt;/code&gt;)&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Of course you can choose a different file location in your jekyll layouts.&lt;/p&gt;
-
-&lt;h3 id=&quot;a-couple-of-examples&quot;&gt;A Couple of Examples&lt;/h3&gt;
-
-&lt;p&gt;Here’s a short list of examples. To know more about the details behind MathJax, you can
-always checked the provided documentation available at
-&lt;a href=&quot;http://docs.mathjax.org/en/latest/&quot;&gt;http://docs.mathjax.org/en/latest/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;I’m assuming you are familiar with LaTeX. However, you should know that MathJax does not
-have the exactly same behavior as LaTeX. By default, the &lt;strong&gt;tex2jax&lt;/strong&gt; preprocessor defines the
-LaTeX math delimiters, which are &lt;code class=&quot;highlighter-rouge&quot;&gt;\\(...\\)&lt;/code&gt; for in-line math, and &lt;code class=&quot;highlighter-rouge&quot;&gt;\\[...\\]&lt;/code&gt; for
-displayed equations. It also defines the TeX delimiters &lt;code class=&quot;highlighter-rouge&quot;&gt;$$...$$&lt;/code&gt; for displayed
-equations, but it does not define &lt;code class=&quot;highlighter-rouge&quot;&gt;$...$&lt;/code&gt; as in-line math delimiters. Fortunately,
-you can change these predefined specifications if you want to do so.&lt;/p&gt;
-
-&lt;p&gt;Let’s try a first example. Here’s a dummy equation:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;a^2 + b^2 = c^2&lt;/script&gt;
-
-&lt;p&gt;How do you write such expression? Very simple: using &lt;strong&gt;double dollar&lt;/strong&gt; signs&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;To display inline math use &lt;code class=&quot;highlighter-rouge&quot;&gt;\\( ... \\)&lt;/code&gt; like this &lt;code class=&quot;highlighter-rouge&quot;&gt;\\( sin(x^2) \\)&lt;/code&gt; which gets
-rendered as \( sin(x^2) \)&lt;/p&gt;
-
-&lt;p&gt;Here’s another example using type &lt;code class=&quot;highlighter-rouge&quot;&gt;\mathsf&lt;/code&gt;&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathsf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PCs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathsf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Loadings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;which gets displayed as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathsf{Data = PCs} \times \mathsf{Loadings}&lt;/script&gt;
-
-&lt;p&gt;Or even better:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;err&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathsf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;is displayed as&lt;/p&gt;
-
-&lt;p&gt;\[ \mathbf{X} = \mathbf{Z} \mathbf{P^\mathsf{T}} \]&lt;/p&gt;
-
-&lt;p&gt;If you want to use subscripts like this \( \mathbf{X}_{n,p} \) you need to scape the
-underscores with a backslash like so &lt;code class=&quot;highlighter-rouge&quot;&gt;\mathbf{X}\_{n,p}&lt;/code&gt;:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;will be displayed as&lt;/p&gt;
-
-&lt;p&gt;\[ \mathbf{X}_{n,p} = \mathbf{A}_{n,k} \mathbf{B}_{k,p} \]&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Images</title>
-   <link href="http://localhost:4000/2013/12/27/images/"/>
-   <updated>2013-12-27T06:46:49+08:00</updated>
-   <id>http://localhost:4000/2013/12/27/images</id>
-   <content type="html">&lt;p&gt;This is a image test post.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/mw690/81b78497jw1emfgwkasznj21hc0u0qb7.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/mw690/81b78497jw1emfgwjrh2pj21hc0u01g3.jpg&quot; alt=&quot;Caption&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/mw690/81b78497jw1emfgwil5xkj21hc0u0tpm.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://placehold.it/350x150.jpg&quot; alt=&quot;Small Picture&quot; /&gt;&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Excerpts</title>
-   <link href="http://localhost:4000/2013/12/25/excerpts/"/>
-   <updated>2013-12-25T08:23:23+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/excerpts</id>
-   <content type="html">&lt;p&gt;The following contents should be invisible in home/archive page.&lt;/p&gt;
-
-&lt;!-- more --&gt;
-
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eget urna vitae velit eleifend interdum at ac nisi. In nec ligula lacus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed eu cursus erat, ut dapibus quam. Aliquam eleifend dolor vitae libero pharetra adipiscing. Etiam adipiscing dolor a quam tempor, eu convallis nulla varius. Aliquam sollicitudin risus a porta aliquam. Ut nec velit dolor. Proin eget leo lobortis, aliquam est sed, mollis mauris. Fusce vitae leo pretium massa accumsan condimentum. Fusce malesuada gravida lectus vel vulputate. Donec bibendum porta nibh ut aliquam.&lt;/p&gt;
-
-&lt;p&gt;Sed lorem felis, congue non fringilla eu, aliquam eu eros. Curabitur orci libero, mollis sed semper vitae, adipiscing in lectus. Aenean non egestas odio. Donec sollicitudin nisi quis lorem gravida, in pharetra mauris fringilla. Duis sit amet faucibus dolor, id aliquam neque. In egestas, odio gravida tempor dictum, mauris felis faucibus purus, sit amet commodo lacus diam vitae est. Ut ut quam eget massa semper sodales. Aenean non ipsum cursus, blandit lectus in, ornare odio. Curabitur ultrices porttitor vulputate.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Block</title>
-   <link href="http://localhost:4000/2013/12/25/block/"/>
-   <updated>2013-12-25T08:14:39+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/block</id>
-   <content type="html">&lt;p&gt;This post is used for testing tag plugins. See &lt;a href=&quot;http://zespia.tw/hexo/docs/tag-plugins.html&quot;&gt;docs&lt;/a&gt; for more info.&lt;/p&gt;
-
-&lt;h2 id=&quot;block-quote&quot;&gt;Block Quote&lt;/h2&gt;
-
-&lt;h3 id=&quot;normal-blockquote&quot;&gt;Normal blockquote&lt;/h3&gt;
-
+   <title>Position</title>
+   <link href="http://localhost:4000/css/2019/04/19/position/"/>
+   <updated>2019-04-19T00:00:00+08:00</updated>
+   <id>http://localhost:4000/css/2019/04/19/position</id>
+   <content type="html">&lt;h2 id=&quot;概念&quot;&gt;概念&lt;/h2&gt;
+&lt;p&gt;MDN&lt;/p&gt;
 &lt;blockquote&gt;
-  &lt;p&gt;Praesent diam elit, interdum ut pulvinar placerat, imperdiet at magna.&lt;/p&gt;
+  &lt;p&gt;用于指定一个元素在文档中的定位方式。top, right, bottom 和 left 属性则决定了该元素的最终位置。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&quot;code-block&quot;&gt;Code Block&lt;/h2&gt;
-
-&lt;h3 id=&quot;normal-code-block&quot;&gt;Normal code block&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;alert('Hello World!');
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print &quot;Hello world&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;highlight-code-block&quot;&gt;Highlight code block&lt;/h3&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello world&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'foo'&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;foo&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'foo'&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;h3 id=&quot;gist&quot;&gt;Gist&lt;/h3&gt;
-
-&lt;script src=&quot;https://gist.github.com/996818.js&quot;&gt; &lt;/script&gt;
-
-</content>
- </entry>
- 
- <entry>
-   <title>日本語テスト</title>
-   <link href="http://localhost:4000/2013/12/25/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88/"/>
-   <updated>2013-12-25T07:33:26+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/日本語テスト</id>
-   <content type="html">&lt;p&gt;This is a Japanese test post.&lt;/p&gt;
-
-&lt;p&gt;私は昨日ついにその助力家というのの上よりするたなけれ。&lt;/p&gt;
-
-&lt;p&gt;最も今をお話団はちょうどこの前後なかろでくらいに困りがいるたをは帰着考えたなかって、そうにもするでうたらない。&lt;/p&gt;
-
-&lt;p&gt;がたを知っないはずも同時に九月をいよいよたありた。&lt;/p&gt;
-
-&lt;p&gt;もっと槙さんにぼんやり金少し説明にえた自分大した人私か影響にというお関係たうませないが、この次第も私か兄具合に使うて、槙さんののに当人のあなたにさぞご意味と行くて私個人が小尊敬を聴いように同時に同反抗に集っだうて、いよいよまず相当へあっうからいだ事をしでなけれ。&lt;/p&gt;
-
+&lt;p&gt;w3school&lt;/p&gt;
 &lt;blockquote&gt;
-  &lt;p&gt;それでそれでもご時日をしはずはたったいやと突き抜けるますて、その元がは行ったてという獄を尽すていけですた。&lt;/p&gt;
+  &lt;p&gt;这个属性定义建立元素布局所用的定位机制。任何元素都可以定位，不过绝对或固定元素会生成一个块级框，而不论该元素本身是什么类型。相对定位元素会相对于它在正常流中的默认位置偏移。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;この中道具の日その学校はあなたごろがすまなりかとネルソンさんの考えるですん、辺の事実ないというご盲従ありたですと、爺さんのためが薬缶が結果までの箸の当時してならて、多少の十月にためからそういう上からとにかくしましないと触れべきものたで、ないうですと多少お人達したのでたた。&lt;/p&gt;
+&lt;h2 id=&quot;取值&quot;&gt;取值&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;static&lt;/code&gt;: 默认值。没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）。&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;From &lt;a href=&quot;http://lipsum.sugutsukaeru.jp/index.cgi&quot;&gt;すぐ使えるダミーテキスト - 日本語 Lorem ipsum&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;inherit&lt;/code&gt;: 规定应该从父元素继承 position 属性的值。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;relative&lt;/code&gt;: 生成相对定位的元素，相对于其正常位置进行定位。因此，”left:20” 会向元素的 LEFT 位置添加 20 像素。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;absolute&lt;/code&gt;: 生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;fixed&lt;/code&gt;: 生成绝对定位的元素，相对于浏览器窗口进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。&lt;/p&gt;
+
+&lt;h2 id=&quot;问题&quot;&gt;问题&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;设置position属性的top left等属性的百分比是相对于谁的&lt;/li&gt;
+  &lt;li&gt;设置为relative元素后，会不会把兄弟元素挤走&lt;/li&gt;
+  &lt;li&gt;设置为relative的元素脱离文档流了吗&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;解答&quot;&gt;解答&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;相对于父元素&lt;/li&gt;
+  &lt;li&gt;不会，是在本身的位置去偏移，只会造成重叠，对其他元素不造成影响&lt;/li&gt;
+  &lt;li&gt;不脱离 absolute fixed会早成脱离文档流&lt;/li&gt;
+&lt;/ul&gt;
+
 </content>
  </entry>
  
  <entry>
-   <title>中文測試</title>
-   <link href="http://localhost:4000/2013/12/25/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"/>
-   <updated>2013-12-25T07:31:30+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/中文測試</id>
-   <content type="html">&lt;p&gt;This is a Chinese test post.&lt;/p&gt;
-
-&lt;p&gt;善我王上魚、產生資西員合兒臉趣論。畫衣生這著爸毛親可時，安程幾？合學作。觀經而作建。都非子作這！法如言子你關！手師也。&lt;/p&gt;
-
-&lt;p&gt;以也座論頭室業放。要車時地變此親不老高小是統習直麼調未，行年香一？&lt;/p&gt;
-
-&lt;p&gt;就竟在，是我童示讓利分和異種百路關母信過明驗有個歷洋中前合著區亮風值新底車有正結，進快保的行戰從：弟除文辦條國備當來際年每小腳識世可的的外的廣下歌洲保輪市果底天影；全氣具些回童但倒影發狀在示，數上學大法很，如要我……月品大供這起服滿老？應學傳者國：山式排只不之然清同關；細車是！停屋常間又，資畫領生，相們制在？公別的人寫教資夠。資再我我！只臉夫藝量不路政吃息緊回力之；兒足灣電空時局我怎初安。意今一子區首者微陸現際安除發連由子由而走學體區園我車當會，經時取頭，嚴了新科同？很夫營動通打，出和導一樂，查旅他。坐是收外子發物北看蘭戰坐車身做可來。道就學務。&lt;/p&gt;
-
-&lt;p&gt;國新故。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;工步他始能詩的，裝進分星海演意學值例道……於財型目古香亮自和這乎？化經溫詩。只賽嚴大一主價世哥受的沒有中年即病行金拉麼河。主小路了種就小為廣不？&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;em&gt;From &lt;a href=&quot;http://www.richyli.com/tool/loremipsum/&quot;&gt;亂數假文產生器 - Chinese Lorem Ipsum&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam justo turpis, tincidunt ac convallis id.</title>
-   <link href="http://localhost:4000/2013/12/25/long-title/"/>
-   <updated>2013-12-25T07:31:06+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/long-title</id>
-   <content type="html">&lt;p&gt;This post has a long title. Make sure the title displayed right.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Categories</title>
-   <link href="http://localhost:4000/foo/bar/baz/2013/12/25/categories/"/>
-   <updated>2013-12-25T07:30:09+08:00</updated>
-   <id>http://localhost:4000/foo/bar/baz/2013/12/25/categories</id>
-   <content type="html">&lt;p&gt;This post contains 3 categories. Make sure your theme can display all of the categories.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Link Post</title>
-   <link href="http://localhost:4000/2013/12/25/link-post/"/>
-   <updated>2013-12-25T07:30:04+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/link-post</id>
-   <content type="html">&lt;p&gt;This is a link post. Clicking on the link should open &lt;a href=&quot;http://www.google.com/&quot;&gt;Google&lt;/a&gt; in a new tab or window.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Tags</title>
-   <link href="http://localhost:4000/2013/12/25/tags/"/>
-   <updated>2013-12-25T07:29:53+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/tags</id>
-   <content type="html">&lt;p&gt;This post contains 3 tags. Make sure your theme can display all of the tags.&lt;/p&gt;
-</content>
- </entry>
- 
- <entry>
-   <title>Elements</title>
-   <link href="http://localhost:4000/2013/12/25/elements/"/>
-   <updated>2013-12-25T07:29:08+08:00</updated>
-   <id>http://localhost:4000/2013/12/25/elements</id>
-   <content type="html">&lt;p&gt;The purpose of this post is to help you make sure all of HTML elements can display properly. If you use CSS reset, don’t forget to redefine the style by yourself.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;heading-1&quot;&gt;Heading 1&lt;/h1&gt;
-
-&lt;h2 id=&quot;heading-2&quot;&gt;Heading 2&lt;/h2&gt;
-
-&lt;h3 id=&quot;heading-3&quot;&gt;Heading 3&lt;/h3&gt;
-
-&lt;h4 id=&quot;heading-4&quot;&gt;Heading 4&lt;/h4&gt;
-
-&lt;h5 id=&quot;heading-5&quot;&gt;Heading 5&lt;/h5&gt;
-
-&lt;h6 id=&quot;heading-6&quot;&gt;Heading 6&lt;/h6&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;paragraph&quot;&gt;Paragraph&lt;/h2&gt;
-
-&lt;p&gt;Lorem ipsum dolor sit amet, &lt;a href=&quot;&quot;&gt;test link&lt;/a&gt; consectetur adipiscing elit. &lt;strong&gt;Strong text&lt;/strong&gt; pellentesque ligula commodo viverra vehicula. &lt;em&gt;Italic text&lt;/em&gt; at ullamcorper enim. Morbi a euismod nibh. &lt;u&gt;Underline text&lt;/u&gt; non elit nisl. &lt;del&gt;Deleted text&lt;/del&gt; tristique, sem id condimentum tempus, metus lectus venenatis mauris, sit amet semper lorem felis a eros. Fusce egestas nibh at sagittis auctor. Sed ultricies ac arcu quis molestie. Donec dapibus nunc in nibh egestas, vitae volutpat sem iaculis. Curabitur sem tellus, elementum nec quam id, fermentum laoreet mi. Ut mollis ullamcorper turpis, vitae facilisis velit ultricies sit amet. Etiam laoreet dui odio, id tempus justo tincidunt id. Phasellus scelerisque nunc sed nunc ultricies accumsan.&lt;/p&gt;
-
-&lt;p&gt;Interdum et malesuada fames ac ante ipsum primis in faucibus. &lt;code class=&quot;highlighter-rouge&quot;&gt;Sed erat diam&lt;/code&gt;, blandit eget felis aliquam, rhoncus varius urna. Donec tellus sapien, sodales eget ante vitae, feugiat ullamcorper urna. Praesent auctor dui vitae dapibus eleifend. Proin viverra mollis neque, ut ullamcorper elit posuere eget.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Praesent diam elit, interdum ut pulvinar placerat, imperdiet at magna.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Maecenas ornare arcu at mi suscipit, non molestie tortor ultrices. Aenean convallis, diam et congue ultricies, erat magna tincidunt orci, pulvinar posuere mi sapien ac magna. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Praesent vitae placerat mauris. Nullam laoreet ante posuere tortor blandit auctor. Sed id ligula volutpat leo consequat placerat. Mauris fermentum dolor sed augue malesuada sollicitudin. Vivamus ultrices nunc felis, quis viverra orci eleifend ut. Donec et quam id urna cursus posuere. Donec elementum scelerisque laoreet.&lt;/p&gt;
-
-&lt;h2 id=&quot;list-types&quot;&gt;List Types&lt;/h2&gt;
-
-&lt;h3 id=&quot;definition-list-dl&quot;&gt;Definition List (dl)&lt;/h3&gt;
-
-&lt;dl&gt;&lt;dt&gt;Definition List Title&lt;/dt&gt;&lt;dd&gt;This is a definition list division.&lt;/dd&gt;&lt;/dl&gt;
-
-&lt;h3 id=&quot;ordered-list-ol&quot;&gt;Ordered List (ol)&lt;/h3&gt;
-
+   <title>Float</title>
+   <link href="http://localhost:4000/css/2019/04/19/float/"/>
+   <updated>2019-04-19T00:00:00+08:00</updated>
+   <id>http://localhost:4000/css/2019/04/19/float</id>
+   <content type="html">&lt;h3 id=&quot;学习的过程&quot;&gt;学习的过程&lt;/h3&gt;
 &lt;ol&gt;
-  &lt;li&gt;List Item 1&lt;/li&gt;
-  &lt;li&gt;List Item 2&lt;/li&gt;
-  &lt;li&gt;List Item 3&lt;/li&gt;
+  &lt;li&gt;带着问题去学习&lt;/li&gt;
+  &lt;li&gt;针对每个问题测试答案&lt;/li&gt;
+  &lt;li&gt;带着答案分析结果&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&quot;unordered-list-ul&quot;&gt;Unordered List (ul)&lt;/h3&gt;
+&lt;h3 id=&quot;问题&quot;&gt;问题&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;概念&lt;/li&gt;
+  &lt;li&gt;可设置的值？&lt;/li&gt;
+  &lt;li&gt;float的元素是脱离文档流的吗？&lt;/li&gt;
+  &lt;li&gt;float后的元素占据空间吗？&lt;/li&gt;
+  &lt;li&gt;float元素的宽高 等百分比是相对于谁的？&lt;/li&gt;
+  &lt;li&gt;float的文字可以围绕他是因为什么？&lt;/li&gt;
+  &lt;li&gt;浮动非替换元素不给宽度尽可能窄是什么意思？&lt;/li&gt;
+  &lt;li&gt;设置了float的元素拥有包含块，可以设置宽高吗？&lt;/li&gt;
+  &lt;li&gt;浮动的”包裹性”&lt;/li&gt;
+  &lt;li&gt;浮动的”破坏性”&lt;/li&gt;
+  &lt;li&gt;去浮动的几种方法及原理？&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;正文&quot;&gt;正文&lt;/h3&gt;
+
+&lt;h4 id=&quot;概念&quot;&gt;概念&lt;/h4&gt;
+&lt;p&gt;float 
+MDN&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;CSS属性指定一个元素应沿其容器的左侧或右侧放置，允许文本和内联元素环绕它。该元素从网页的正常流动中移除，尽管仍然保持部分的流动性（与绝对定位相反）。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;w3school&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;float属性定义元素在哪个方向浮动。以往这个属性总应用于图像，使文本围绕在图像周围，不过在CSS中，任何元素都可以浮动。浮动元素会生成一个块级框，而不论它本身是何种元素。
+ 如果浮动非替换元素，则要指定一个明确的宽度；否则，它们会尽可能地窄。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;可设置的值
+&lt;code class=&quot;highlighter-rouge&quot;&gt;left&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;right&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;none&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;inerit&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1.float的元素是脱离文档流的吗？&lt;br /&gt;
+是，浮动元素会从普通文档流中脱离，但浮动元素影响的不仅是自己，还会影响其周围的元素对其进行围绕
+当元素应用了float属性后，将会脱离普通流，其容器（父）元素将得不到脱离普通流的子元素高度。导致父元素塌陷&lt;/p&gt;
+
+&lt;p&gt;2.float后的元素占据空间吗？&lt;/p&gt;
+
+&lt;p&gt;占据 同position:relative一样&lt;/p&gt;
+
+&lt;p&gt;3.float元素的宽高 等百分比是相对于谁的？&lt;/p&gt;
+
+&lt;p&gt;相对于父元素&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;List Item 1&lt;/li&gt;
-  &lt;li&gt;List Item 2&lt;/li&gt;
-  &lt;li&gt;List Item 3&lt;/li&gt;
+  &lt;li&gt;float的文字可以围绕他是因为什么？&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;table&quot;&gt;Table&lt;/h2&gt;
+&lt;p&gt;float元素特有的围绕性，设置了float属性的元素会影响周围元素及使父元素塌陷&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Table Header 1&lt;/th&gt;
-      &lt;th&gt;Table Header 2&lt;/th&gt;
-      &lt;th&gt;Table Header 3&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Division 1&lt;/td&gt;
-      &lt;td&gt;Division 2&lt;/td&gt;
-      &lt;td&gt;Division 3&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Division 1&lt;/td&gt;
-      &lt;td&gt;Division 2&lt;/td&gt;
-      &lt;td&gt;Division 3&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Division 1&lt;/td&gt;
-      &lt;td&gt;Division 2&lt;/td&gt;
-      &lt;td&gt;Division 3&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;ul&gt;
+  &lt;li&gt;浮动非替换元素不给宽度尽可能窄是什么意思？&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;h2 id=&quot;misc-stuff---abbr-acronym-sub-sup-etc&quot;&gt;Misc Stuff - abbr, acronym, sub, sup, etc.&lt;/h2&gt;
+&lt;p&gt;设置了float属性的元素（非替换），在自己的周围生成一圈包含块，如果不给他设置宽，会以内容的宽度为准，因为替换元素本身有宽度属性，所以不受影响&lt;/p&gt;
 
-&lt;p&gt;Lorem &lt;sup&gt;superscript&lt;/sup&gt; dolor &lt;sub&gt;subscript&lt;/sub&gt; amet, consectetuer adipiscing elit. Nullam dignissim convallis est. Quisque aliquam. &lt;cite&gt;cite&lt;/cite&gt;. Nunc iaculis suscipit dui. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl. Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus. Maecenas ornare tortor. Donec sed tellus eget sapien fringilla nonummy. &lt;acronym title=&quot;National Basketball Association&quot;&gt;NBA&lt;/acronym&gt; Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.  &lt;abbr title=&quot;Avenue&quot;&gt;AVE&lt;/abbr&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;设置了float的元素拥有包含块，可以设置宽高吗？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;可以
+测试的span对象，在设置float之后，宽高设置生效&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;浮动的”包裹性”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在某种意义上，设置了float的元素与设置了display:inline-block的作用是一样的，只是float可以设置方向，有方向性
+所以有的时候display:block float:left 这种代码大部分都是无意义的 display:block可以去掉&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;浮动的”破坏性”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在设置了float之后，会破坏line-height 及基线（inline-box的概念，看着有点蒙，后续继续跟进）&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;去浮动的几种方法及原理？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;增加div，设置clear:both
+最简单的办法，哪里有浮动，就在其父元素内部增加一个div，作为最后一个子元素
+&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;div style=&quot;clear:both&quot;&amp;gt;&amp;lt;/div&amp;gt;&lt;/code&gt;
+优点：简单易懂
+缺点：增加额外的无意义div标签，没有语意化&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;父元素添加overflow:hidden&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个方法的关键在于，触发了BFC
+优点：代码量少
+缺点：如果子元素超出父元素，会造成超出部分被隐藏&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;after伪元素&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;通过它设置一个具有clear:both的伪元素
+优点：原理同第一个方法，不增加额外的标签
+缺点：稍显复杂&lt;/p&gt;
+
+&lt;h3 id=&quot;应用&quot;&gt;应用&lt;/h3&gt;
+&lt;p&gt;文字环绕
+横向菜单排列
+布局&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Firstarticle</title>
+   <link href="http://localhost:4000/2019/04/19/firstArticle/"/>
+   <updated>2019-04-19T00:00:00+08:00</updated>
+   <id>http://localhost:4000/2019/04/19/firstArticle</id>
+   <content type="html">&lt;h1 id=&quot;标题&quot;&gt;标题&lt;/h1&gt;
+&lt;p&gt;纪念一下，看能坚持多久，哈哈哈&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>BFC</title>
+   <link href="http://localhost:4000/css/2019/04/19/bfc/"/>
+   <updated>2019-04-19T00:00:00+08:00</updated>
+   <id>http://localhost:4000/css/2019/04/19/bfc</id>
+   <content type="html">&lt;h1 id=&quot;概念&quot;&gt;概念&lt;/h1&gt;
+&lt;p&gt;MDN&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;一个块格式化上下文（block formatting context）是Web页面的可视化CSS渲染出的一部分。它是块级盒布局出现的区域，也是浮动层元素进行交互的区域。
+W3C
+BFC (Block Formattng Context)块圾格式上下文，是web页面中盒模型布局的css渲染模式，它的定位体系属于常规文档流。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;一个块格式化上下文由以下之一创建：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;根元素或其它包含它的元素&lt;/li&gt;
+  &lt;li&gt;浮动元素 (元素的 float 不是 none)&lt;/li&gt;
+  &lt;li&gt;绝对定位元素 (元素的 position 为 absolute 或 fixed)&lt;/li&gt;
+  &lt;li&gt;内联块 (元素具有 display: inline-block)&lt;/li&gt;
+  &lt;li&gt;表格单元格 (元素具有 display: table-cell，HTML表格单元格默认属性)&lt;/li&gt;
+  &lt;li&gt;表格标题 (元素具有 display: table-caption, HTML表格标题默认属性)&lt;/li&gt;
+  &lt;li&gt;具有overflow 且值不是 visible 的块元素，&lt;/li&gt;
+  &lt;li&gt;display: flow-root&lt;/li&gt;
+  &lt;li&gt;column-span: all 应当总是会创建一个新的格式化上下文，即便具有 column-span: all 的元素并不被包裹在一个多列容器中。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;一个块格式化上下文包括创建它的元素内部所有内容，除了被包含于创建新的块级格式化上下文的后代元素内的元素。&lt;/p&gt;
+
+&lt;p&gt;块格式化上下文对于定位 (参见 float) 与清除浮动 (参见 clear) 很重要。定位和清除浮动的样式规则只适用于处于同一块格式化上下文内的元素。浮动不会影响其它块格式化上下文中元素的布局，并且清除浮动只能清除同一块格式化上下文中在它前面的元素的浮动。&lt;/p&gt;
+
+&lt;h1 id=&quot;如何形成的&quot;&gt;如何形成的&lt;/h1&gt;
+&lt;p&gt;浮动，绝对定位元素，inline-blocks,table-cells,table-captions,和overflow的值不为visible的元素，（除了这个值已经被传到了视口的时候）将创建一个新的块级格式化上下文。
+举例说明能够生成一个新的BFC的例子：
+float的值不为none
+position的值不为relative或者static
+display的值为table-cell table-caption inline-block flex 或者inline-flex中的一个
+overflow不为visible&lt;/p&gt;
+
+&lt;h1 id=&quot;bfc导致的外边距重叠&quot;&gt;BFC导致的外边距重叠&lt;/h1&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;//见index.html&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;box&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;盒子&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/p&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;盒子&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/p&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;盒子&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/p&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;style&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;box&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;overflow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hidden&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/*仅仅用作形成一个BFC*/&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;background&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rebeccapurple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;box&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;margin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;px&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;background&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;salmon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nl&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;px&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/style&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 结果就是两个子div之间的间距变成 10px 而不是叠加的20px 被成为外边距重叠&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 这样的情况仅仅发生在两个相邻的块级盒子在同一个BFC中才会发生，所以如果处于不同的BFC就不会发生外边距重叠&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 所以，解决办法就是制造一个新的BFC块&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;box&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/p&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/p&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;bfc2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;p3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/p&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bfc2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nl&quot;&gt;overflow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hidden&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// 结果就是p3 与p2之间的距离变为20px&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;为了清除浮动创建的bfc&quot;&gt;为了清除浮动创建的BFC&lt;/h1&gt;
+&lt;p&gt;通常情况下，容器内部含有浮动元素，导致容器没有高度变成塌陷了
+可以通过创建一个BFC来解决这个问题，计算BFC高度的时候，浮动元素的高度也计算在内&lt;/p&gt;
+
+&lt;h1 id=&quot;使用bfc来阻止文字环绕&quot;&gt;使用BFC来阻止文字环绕&lt;/h1&gt;
+&lt;p&gt;原理是BFC的元素的左边总是与包含快的左边相接触
+见index3.html
+给p标签增加overflow: hidden 创建一个新的BFC，生成新的包含快，BFC的定义是左边与包含快的左边紧紧相接触，所以文字环绕现象消除&lt;/p&gt;
+
+&lt;h1 id=&quot;参考&quot;&gt;参考&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context&quot;&gt;MDN-BFC&lt;/a&gt;
+&lt;a href=&quot;https://www.w3cplus.com/css/understanding-block-formatting-contexts-in-css.html&quot;&gt;BFC&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  

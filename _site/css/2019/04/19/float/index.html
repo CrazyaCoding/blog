@@ -1,6 +1,6 @@
 
 
-    <!DOCTYPE HTML>
+ <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     
     
     
-    <title>About me | panpan Shang</title>
+    <title>Float | panpan Shang</title>
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
@@ -21,14 +21,14 @@
 
     <meta name="description" content="page.description">
     
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="article">
     
-    <meta property="og:title" content="About me">
-    <meta property="og:url" content="/about/">
+    <meta property="og:title" content="Float">
+    <meta property="og:url" content="/css/2019/04/19/float/">
     <meta property="og:site_name" content="panpan Shang">
     <meta property="og:description" content="">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="About me">
+    <meta name="twitter:title" content="Float">
     <meta name="twitter:description" content="page.description">
     <meta name="twitter:creator" content="@">
     <link rel="publisher" href="">
@@ -48,9 +48,9 @@
     
 </head>
 
-      <body>
-        <header>
-          <div>
+  <body>
+    <header>
+        <div>
 		    
 			<div id="imglogo">
 				<a href="/"><img src="/assets/img/logo.png" alt="panpan Shang" title="panpan Shang"/></a>
@@ -83,37 +83,186 @@
 			</nav>
 </div>
 
-        </header>
-        <div id="container">
-          
+    </header>
+    <div id="container">
+      
 
 
 
-
-<div id="main" class="page" itemscope itemprop="blogPost">
+<div id="main" class="post" itemscope itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 	<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/about/" title="About me" itemprop="url">About me</a>
+      <a href="/css/2019/04/19/float/" title="Float" itemprop="url">Float</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="shangpanpan" target="_blank" itemprop="author">shangpanpan</a>
 		
   <p class="article-time">
-    <time datetime="" itemprop="datePublished"> 发表于 </time>
+    <time datetime="2019-04-19 00:00:00 +0800" itemprop="datePublished"> 发表于 2019-04-19</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		Building....  
+		<div id="toc" class="toc-article toc-content" style="display: none;">
+		
+			<!--<%- toc(item.content) %>-->
+		
+		</div>
+		
+		<h3 id="学习的过程">学习的过程</h3>
+<ol>
+  <li>带着问题去学习</li>
+  <li>针对每个问题测试答案</li>
+  <li>带着答案分析结果</li>
+</ol>
+
+<h3 id="问题">问题</h3>
+<ol>
+  <li>概念</li>
+  <li>可设置的值？</li>
+  <li>float的元素是脱离文档流的吗？</li>
+  <li>float后的元素占据空间吗？</li>
+  <li>float元素的宽高 等百分比是相对于谁的？</li>
+  <li>float的文字可以围绕他是因为什么？</li>
+  <li>浮动非替换元素不给宽度尽可能窄是什么意思？</li>
+  <li>设置了float的元素拥有包含块，可以设置宽高吗？</li>
+  <li>浮动的”包裹性”</li>
+  <li>浮动的”破坏性”</li>
+  <li>去浮动的几种方法及原理？</li>
+</ol>
+
+<h3 id="正文">正文</h3>
+
+<h4 id="概念">概念</h4>
+<p>float 
+MDN</p>
+<blockquote>
+  <p>CSS属性指定一个元素应沿其容器的左侧或右侧放置，允许文本和内联元素环绕它。该元素从网页的正常流动中移除，尽管仍然保持部分的流动性（与绝对定位相反）。</p>
+</blockquote>
+
+<p>w3school</p>
+<blockquote>
+  <p>float属性定义元素在哪个方向浮动。以往这个属性总应用于图像，使文本围绕在图像周围，不过在CSS中，任何元素都可以浮动。浮动元素会生成一个块级框，而不论它本身是何种元素。
+ 如果浮动非替换元素，则要指定一个明确的宽度；否则，它们会尽可能地窄。</p>
+</blockquote>
+
+<p>可设置的值
+<code class="highlighter-rouge">left</code> <code class="highlighter-rouge">right</code> <code class="highlighter-rouge">none</code> <code class="highlighter-rouge">inerit</code></p>
+
+<p>1.float的元素是脱离文档流的吗？<br />
+是，浮动元素会从普通文档流中脱离，但浮动元素影响的不仅是自己，还会影响其周围的元素对其进行围绕
+当元素应用了float属性后，将会脱离普通流，其容器（父）元素将得不到脱离普通流的子元素高度。导致父元素塌陷</p>
+
+<p>2.float后的元素占据空间吗？</p>
+
+<p>占据 同position:relative一样</p>
+
+<p>3.float元素的宽高 等百分比是相对于谁的？</p>
+
+<p>相对于父元素</p>
+
+<ul>
+  <li>float的文字可以围绕他是因为什么？</li>
+</ul>
+
+<p>float元素特有的围绕性，设置了float属性的元素会影响周围元素及使父元素塌陷</p>
+
+<ul>
+  <li>浮动非替换元素不给宽度尽可能窄是什么意思？</li>
+</ul>
+
+<p>设置了float属性的元素（非替换），在自己的周围生成一圈包含块，如果不给他设置宽，会以内容的宽度为准，因为替换元素本身有宽度属性，所以不受影响</p>
+
+<ul>
+  <li>设置了float的元素拥有包含块，可以设置宽高吗？</li>
+</ul>
+
+<p>可以
+测试的span对象，在设置float之后，宽高设置生效</p>
+
+<ul>
+  <li>浮动的”包裹性”</li>
+</ul>
+
+<p>在某种意义上，设置了float的元素与设置了display:inline-block的作用是一样的，只是float可以设置方向，有方向性
+所以有的时候display:block float:left 这种代码大部分都是无意义的 display:block可以去掉</p>
+
+<ul>
+  <li>浮动的”破坏性”</li>
+</ul>
+
+<p>在设置了float之后，会破坏line-height 及基线（inline-box的概念，看着有点蒙，后续继续跟进）</p>
+
+<ul>
+  <li>去浮动的几种方法及原理？</li>
+</ul>
+
+<p>增加div，设置clear:both
+最简单的办法，哪里有浮动，就在其父元素内部增加一个div，作为最后一个子元素
+<code class="highlighter-rouge">&lt;div style="clear:both"&gt;&lt;/div&gt;</code>
+优点：简单易懂
+缺点：增加额外的无意义div标签，没有语意化</p>
+
+<ul>
+  <li>父元素添加overflow:hidden</li>
+</ul>
+
+<p>这个方法的关键在于，触发了BFC
+优点：代码量少
+缺点：如果子元素超出父元素，会造成超出部分被隐藏</p>
+
+<ul>
+  <li>after伪元素</li>
+</ul>
+
+<p>通过它设置一个具有clear:both的伪元素
+优点：原理同第一个方法，不增加额外的标签
+缺点：稍显复杂</p>
+
+<h3 id="应用">应用</h3>
+<p>文字环绕
+横向菜单排列
+布局</p>
+  
 	</div>
 	<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#css">css</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#原理">原理</a>
+  
+  <a href="/tags/#css">css</a>
+  
+  </div>
 
 </div>
 
@@ -121,7 +270,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://localhost:4000/about/" data-title="About me | panpan Shang" data-tsina="" class="share clearfix">
+	  <div data-url="http://localhost:4000/css/2019/04/19/float/" data-title="Float | panpan Shang" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -131,11 +280,138 @@
    
 	</article>
 	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2019/04/19/firstArticle/" title="Firstarticle">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Firstarticle</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/css/2019/04/19/position/"  title="Position">
+ <strong>下一篇：</strong><br/> 
+ <span>Position
+</span>
+</a>
+</div>
+
+</nav>
+
 	
 
 </div>  
-        </div>
-        <footer><div id="footer" >
+
+      
+      
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside toc-content">
+ 
+ <!--<%- toc(item.content) %>-->
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/#css" title="css">css<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#js" title="js">js<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#浏览器" title="浏览器">浏览器<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/#原理" title="原理">原理<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#css" title="css">css<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#promise" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#源码" title="源码">源码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#js" title="js">js<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#浏览器" title="浏览器">浏览器<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div id="tagcloud" class="tagcloudlist clearfix">
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            <a href="https://juejin.im/user/589933ff2f301e00697ab55f" target="_blank" title="掘金">掘金</a>
+          </li>
+        
+          <li>
+            <a href="https://segmentfault.com/u/_spp" target="_blank" title="segmentfault">segmentfault</a>
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  
+
+  <div class="rsspart">
+	<a href="" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
 	
 	<div class="line">
 		<span></span>
@@ -185,7 +461,7 @@
 		</p>
 </div>
 </footer>
-        <script src="/assets/js/jquery-2.0.3.min.js"></script>
+    <script src="/assets/js/jquery-2.0.3.min.js"></script>
 <script src="/assets/js/jquery.imagesloaded.min.js"></script>
 <script src="/assets/js/gallery.js"></script>
 <script src="/assets/js/jquery.qrcode-0.12.0.min.js"></script>
@@ -233,6 +509,8 @@ $(document).ready(function(){
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
       
+      $('#toc.toc-aside').css('display', 'none');
+      
     }
   });
 });
@@ -263,7 +541,47 @@ $(document).ready(function() {
 
 
 
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#toc.toc-aside').toc({
+    title: "文章目录",
+    showEffect: "none"
+  });
+  $('#toc.toc-article').toc({
+    title: "文章目录",
+    showEffect: "show",
+    showSpeed: 0
+  });
+});
+</script>
 
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
 
 
 
@@ -418,6 +736,6 @@ $(document).ready(function(){
 
 <!-- Tiny_search End -->
 
-      </body>
-     </html>
+  </body>
+</html>
 

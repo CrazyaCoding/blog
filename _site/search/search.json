@@ -8,115 +8,51 @@
     
     
       {
-        "title": "Elements",
-        "date": "2013 年 12 月",
-        "excerpt": "The purpose of this post is to help you make sure all of HTML elements can display properly. If you use CSS reset, don’t forget to redefine the style by yourself.\n\n",
+        "title": "BFC",
+        "date": "2019 年 04 月",
+        "excerpt": "概念\nMDN\n\n  一个块格式化上下文（block formatting context）是Web页面的可视化CSS渲染出的一部分。它是块级盒布局出现的区域，也是浮动层元素进行交互的区域。\nW3C\nBFC (Block Formattng Context)块圾格式上下文，是web页面中盒模型布局的css渲染模式，它的定位体系属于常规文档流。\n\n\n",
         
-        "url": "/2013/12/25/elements/"
+        "url": "/css/2019/04/19/bfc/"
       },
     
       {
-        "title": "Tags",
-        "date": "2013 年 12 月",
-        "excerpt": "This post contains 3 tags. Make sure your theme can display all of the tags.\n",
+        "title": "Firstarticle",
+        "date": "2019 年 04 月",
+        "excerpt": "标题\n纪念一下，看能坚持多久，哈哈哈\n",
         
-        "url": "/2013/12/25/tags/"
+        "url": "/2019/04/19/firstArticle/"
       },
     
       {
-        "title": "Link Post",
-        "date": "2013 年 12 月",
-        "excerpt": "This is a link post. Clicking on the link should open Google in a new tab or window.\n",
+        "title": "Float",
+        "date": "2019 年 04 月",
+        "excerpt": "学习的过程\n\n  带着问题去学习\n  针对每个问题测试答案\n  带着答案分析结果\n\n\n",
         
-        "url": "/2013/12/25/link-post/"
+        "url": "/css/2019/04/19/float/"
       },
     
       {
-        "title": "Categories",
-        "date": "2013 年 12 月",
-        "excerpt": "This post contains 3 categories. Make sure your theme can display all of the categories.\n",
+        "title": "Position",
+        "date": "2019 年 04 月",
+        "excerpt": "概念\nMDN\n\n  用于指定一个元素在文档中的定位方式。top, right, bottom 和 left 属性则决定了该元素的最终位置。\n\n\n",
         
-        "url": "/foo/bar/baz/2013/12/25/categories/"
+        "url": "/css/2019/04/19/position/"
       },
     
       {
-        "title": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam justo turpis, tincidunt ac convallis id.",
-        "date": "2013 年 12 月",
-        "excerpt": "This post has a long title. Make sure the title displayed right.\n",
+        "title": "promise的深入学习",
+        "date": "2019 年 04 月",
+        "excerpt": "为什么会产生promise\n目前，我们对于异步函数的处理均是来源于回调函数，与普通函数不同的是，回调函数的内容是异步操作完成后的后续逻辑，并被第三方调用\n\n",
         
-        "url": "/2013/12/25/long-title/"
+        "url": "/js/2019/04/19/promise/"
       },
     
       {
-        "title": "中文測試",
-        "date": "2013 年 12 月",
-        "excerpt": "This is a Chinese test post.\n\n",
+        "title": "Javascript是单线程",
+        "date": "2019 年 04 月",
+        "excerpt": "Javascript是单线程\nJavascript引擎是单线程运行的，浏览器在什么时候，都且只有一个线程在运行javascript\n\n",
         
-        "url": "/2013/12/25/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
-      },
-    
-      {
-        "title": "日本語テスト",
-        "date": "2013 年 12 月",
-        "excerpt": "This is a Japanese test post.\n\n",
-        
-        "url": "/2013/12/25/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88/"
-      },
-    
-      {
-        "title": "Block",
-        "date": "2013 年 12 月",
-        "excerpt": "This post is used for testing tag plugins. See docs for more info.\n\n",
-        
-        "url": "/2013/12/25/block/"
-      },
-    
-      {
-        "title": "Excerpts",
-        "date": "2013 年 12 月",
-        "excerpt": "The following contents should be invisible in home/archive page.\n\n",
-        
-        "url": "/2013/12/25/excerpts/"
-      },
-    
-      {
-        "title": "Images",
-        "date": "2013 年 12 月",
-        "excerpt": "This is a image test post.\n\n",
-        
-        "url": "/2013/12/27/images/"
-      },
-    
-      {
-        "title": "MathJax with Jekyll",
-        "date": "2014 年 02 月",
-        "excerpt": "One of the rewards of switching my website to Jekyll is the\nability to support MathJax, which means I can write LaTeX-like equations that get\nnicely displayed in a web browser, like this one \\( \\sqrt{\\frac{n!}{k!(n-k)!}} \\) or\nthis one \\( x^2 + y^2 = r^2 \\).\n\n",
-        
-        "url": "/opinion/2014/02/16/Mathjax-with-jekyll/"
-      },
-    
-      {
-        "title": "Gallery Post",
-        "date": "2014 年 11 月",
-        "excerpt": "Nunc dignissim volutpat enim, non sollicitudin purus dignissim id. Nam sit amet urna eu velit lacinia eleifend. Proin auctor rhoncus ligula nec aliquet. Donec sodales molestie lacinia. Curabitur dictum faucibus urna at convallis. Aliquam in lectus at urna rutrum porta. In lacus arcu, molestie ut vestibulum ut, rhoncus sed eros. Sed et elit vitae risus pretium consectetur vel in mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tempus turpis quis lectus rhoncus adipiscing. Proin pulvinar placerat suscipit. Maecenas imperdiet, quam vitae varius auctor, enim mauris vulputate sapien, nec laoreet neque diam non quam.\n\n",
-        
-        "url": "/photo/2014/11/18/gallery-post/"
-      },
-    
-      {
-        "title": "Emoji Test",
-        "date": "2015 年 09 月",
-        "excerpt": "This is an emoji test. :smile:\n\n",
-        
-        "url": "/2015/09/19/emoji-test/"
-      },
-    
-      {
-        "title": "如何使用 Jacman 主题",
-        "date": "2015 年 09 月",
-        "excerpt": "主题介绍\nJekyll-Jacman 是为 Jekyll 设计的一款清新且具有响应式的主题，拥有更丰富的特性并支持了很多的国内服务。Jacman 始于 Jacman 移植而来。\n\n",
-        
-        "url": "/jekyll/2015/09/20/how-to-use-jacman/"
+        "url": "/%E6%B5%8F%E8%A7%88%E5%99%A8/2019/04/19/%E5%8D%95%E7%BA%BF%E7%A8%8B/"
       },
     
   

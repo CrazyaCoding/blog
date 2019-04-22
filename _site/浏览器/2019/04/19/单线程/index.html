@@ -1,6 +1,6 @@
 
 
-    <!DOCTYPE HTML>
+ <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     
     
     
-    <title>About me | panpan Shang</title>
+    <title>Javascript是单线程 | panpan Shang</title>
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
@@ -21,14 +21,14 @@
 
     <meta name="description" content="page.description">
     
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="article">
     
-    <meta property="og:title" content="About me">
-    <meta property="og:url" content="/about/">
+    <meta property="og:title" content="Javascript是单线程">
+    <meta property="og:url" content="/%E6%B5%8F%E8%A7%88%E5%99%A8/2019/04/19/%E5%8D%95%E7%BA%BF%E7%A8%8B/">
     <meta property="og:site_name" content="panpan Shang">
     <meta property="og:description" content="">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="About me">
+    <meta name="twitter:title" content="Javascript是单线程">
     <meta name="twitter:description" content="page.description">
     <meta name="twitter:creator" content="@">
     <link rel="publisher" href="">
@@ -48,9 +48,9 @@
     
 </head>
 
-      <body>
-        <header>
-          <div>
+  <body>
+    <header>
+        <div>
 		    
 			<div id="imglogo">
 				<a href="/"><img src="/assets/img/logo.png" alt="panpan Shang" title="panpan Shang"/></a>
@@ -83,37 +83,81 @@
 			</nav>
 </div>
 
-        </header>
-        <div id="container">
-          
+    </header>
+    <div id="container">
+      
 
 
 
-
-<div id="main" class="page" itemscope itemprop="blogPost">
+<div id="main" class="post" itemscope itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 	<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/about/" title="About me" itemprop="url">About me</a>
+      <a href="/%E6%B5%8F%E8%A7%88%E5%99%A8/2019/04/19/%E5%8D%95%E7%BA%BF%E7%A8%8B/" title="Javascript是单线程" itemprop="url">Javascript是单线程</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="shangpanpan" target="_blank" itemprop="author">shangpanpan</a>
 		
   <p class="article-time">
-    <time datetime="" itemprop="datePublished"> 发表于 </time>
+    <time datetime="2019-04-19 00:00:00 +0800" itemprop="datePublished"> 发表于 2019-04-19</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		Building....  
+		<div id="toc" class="toc-article toc-content" style="display: none;">
+		
+			<!--<%- toc(item.content) %>-->
+		
+		</div>
+		
+		<h2 id="javascript是单线程">Javascript是单线程</h2>
+<p>Javascript引擎是单线程运行的，浏览器在什么时候，都且只有一个线程在运行javascript</p>
+
+<p>浏览器的内核是多线程的，它们在内核控制下相互配合以保持同步，一个浏览器至少实现三个常驻引擎：<code class="highlighter-rouge">javascript引擎线程</code>、<code class="highlighter-rouge">GUI渲染线程</code>、<code class="highlighter-rouge">浏览器事件触发线程</code></p>
+
+<ul>
+  <li>javascript引擎线程：是基于事件驱动单线程执行的，javascript引擎一直等待着任务队列中任务的到来，</li>
+  <li>GUI渲染线程：负责渲染浏览器界面，当界面需要重绘（Repaint）或者由于某种操作引发回流时，该线程就会执行。需要注意的是GUI与上面javascript引擎是互斥的，当javascript引擎执行时GUI线程就会被挂起，GUI更新会被保存在一个队列中，等到javascript引擎空闲时立即执行。</li>
+  <li>事件触发线程：当一个事件被触发时该线程会把事件添加到待处理队列的队尾，等待javascript引擎的处理，事件可以是setTimeout、ajax，也可来自浏览器内核的其他线程的鼠标点击，ajax异步请求等，所有这些事件都得排队等待javascript引擎处理</li>
+</ul>
+
+  
 	</div>
 	<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#浏览器">浏览器</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#浏览器">浏览器</a>
+  
+  </div>
 
 </div>
 
@@ -121,7 +165,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://localhost:4000/about/" data-title="About me | panpan Shang" data-tsina="" class="share clearfix">
+	  <div data-url="http://localhost:4000/%E6%B5%8F%E8%A7%88%E5%99%A8/2019/04/19/%E5%8D%95%E7%BA%BF%E7%A8%8B/" data-title="Javascript是单线程 | panpan Shang" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -131,11 +175,130 @@
    
 	</article>
 	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/js/2019/04/19/promise/" title="promise的深入学习">
+  <strong>上一篇：</strong><br/>
+  <span>
+  promise的深入学习</span>
+</a>
+</div>
+
+
+</nav>
+
 	
 
 </div>  
-        </div>
-        <footer><div id="footer" >
+
+      
+      
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside toc-content">
+ 
+ <!--<%- toc(item.content) %>-->
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/#css" title="css">css<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#js" title="js">js<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#浏览器" title="浏览器">浏览器<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/#原理" title="原理">原理<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#css" title="css">css<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#promise" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#源码" title="源码">源码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#js" title="js">js<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#浏览器" title="浏览器">浏览器<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div id="tagcloud" class="tagcloudlist clearfix">
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            <a href="https://juejin.im/user/589933ff2f301e00697ab55f" target="_blank" title="掘金">掘金</a>
+          </li>
+        
+          <li>
+            <a href="https://segmentfault.com/u/_spp" target="_blank" title="segmentfault">segmentfault</a>
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  
+
+  <div class="rsspart">
+	<a href="" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
 	
 	<div class="line">
 		<span></span>
@@ -185,7 +348,7 @@
 		</p>
 </div>
 </footer>
-        <script src="/assets/js/jquery-2.0.3.min.js"></script>
+    <script src="/assets/js/jquery-2.0.3.min.js"></script>
 <script src="/assets/js/jquery.imagesloaded.min.js"></script>
 <script src="/assets/js/gallery.js"></script>
 <script src="/assets/js/jquery.qrcode-0.12.0.min.js"></script>
@@ -233,6 +396,8 @@ $(document).ready(function(){
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
       
+      $('#toc.toc-aside').css('display', 'none');
+      
     }
   });
 });
@@ -263,7 +428,47 @@ $(document).ready(function() {
 
 
 
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#toc.toc-aside').toc({
+    title: "文章目录",
+    showEffect: "none"
+  });
+  $('#toc.toc-article').toc({
+    title: "文章目录",
+    showEffect: "show",
+    showSpeed: 0
+  });
+});
+</script>
 
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
 
 
 
@@ -418,6 +623,6 @@ $(document).ready(function(){
 
 <!-- Tiny_search End -->
 
-      </body>
-     </html>
+  </body>
+</html>
 

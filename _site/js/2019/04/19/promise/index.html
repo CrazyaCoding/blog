@@ -1,0 +1,782 @@
+
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+    
+    
+    
+    
+    <title>promise的深入学习 | panpan Shang</title>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="shangpanpan">
+    
+
+    
+    <!--<%- open_graph({twitter_id: theme.author.twitter, google_plus: theme.author.google_plus}) %>-->
+
+    <meta name="description" content="page.description">
+    
+    <meta property="og:type" content="article">
+    
+    <meta property="og:title" content="promise的深入学习">
+    <meta property="og:url" content="/js/2019/04/19/promise/">
+    <meta property="og:site_name" content="panpan Shang">
+    <meta property="og:description" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="promise的深入学习">
+    <meta name="twitter:description" content="page.description">
+    <meta name="twitter:creator" content="@">
+    <link rel="publisher" href="">
+
+    
+    
+    <link rel="icon" href="/assets/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/assets/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/jacman.jpg">
+    
+
+    <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/assets/css/highlight.css" type="text/css">
+    
+    
+</head>
+
+  <body>
+    <header>
+        <div>
+		    
+			<div id="imglogo">
+				<a href="/"><img src="/assets/img/logo.png" alt="panpan Shang" title="panpan Shang"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="panpan Shang">panpan Shang</a></h1>
+				<h2 class="blog-motto">In me the tiger sniffs the rose.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search" method="get" accept-charset="utf-8">
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>
+</div>
+
+    </header>
+    <div id="container">
+      
+
+
+
+<div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+	<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/js/2019/04/19/promise/" title="promise的深入学习" itemprop="url">promise的深入学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="shangpanpan" target="_blank" itemprop="author">shangpanpan</a>
+		
+  <p class="article-time">
+    <time datetime="2019-04-19 00:00:00 +0800" itemprop="datePublished"> 发表于 2019-04-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article toc-content" style="display: none;">
+		
+			<!--<%- toc(item.content) %>-->
+		
+		</div>
+		
+		<h2 id="为什么会产生promise">为什么会产生promise</h2>
+<p>目前，我们对于异步函数的处理均是来源于回调函数，与普通函数不同的是，回调函数的内容是异步操作完成后的后续逻辑，并被第三方调用</p>
+
+<p>以ajax为例子</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ajax.get('xxx', dataA =&gt; {
+    ajax.get('yyy', dataB =&gt; {
+        //handle
+    })
+})
+</code></pre></div></div>
+<p>这样一来，在处理越来越多的异步逻辑时，回调也就越深
+会产生如下几个问题：</p>
+<ul>
+  <li>代码逻辑书写顺序与执行顺序不一致，不利于阅读与维护</li>
+  <li>异步操作的顺序变更时，需要大规模的代码重构</li>
+  <li>回掉函数基本都是匿名函数，bug追踪困难</li>
+  <li>回调函数是被第三方库代码调用，而非自己的业务代码所调用，造成了控制反转</li>
+</ul>
+
+<p>其中，最后一个问题是编码中的最大的问题，由于回掉函数是被第三方库调用的，因此无法预期自己被执行时的环境，可能会导致：</p>
+<ul>
+  <li>回调被执行了多次</li>
+  <li>回调一次都没有被执行</li>
+  <li>回调不是异步执行而是被同步执行</li>
+  <li>回调被过早执行或过晚执行</li>
+  <li>回调中的报错被第三方吞噬掉</li>
+</ul>
+
+<p>以上述为例，基于promise的例子是这样的</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    function getDataA(){
+        return new Promise((resolve, reject) =&gt; {
+            ajax.get('xxx', dataA =&gt; {
+                resolve(dataA)
+            })
+        })
+    }
+    function getDataB(dataA){
+        return new Promise((resolve, reject) =&gt; {
+            ajax.get('xxx'+dataA, dataB =&gt; {
+                resolve(dataB)
+            })
+    }
+    getDataA()
+    .then(dataA =&gt; {getDataB(dataA)})
+    .then(dataB =&gt; console.log(dataB))
+</code></pre></div></div>
+<h2 id="基础概念">基础概念</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>在上面的例子中，其实promise充当了一个中间机的作用，将回调造成的控制反转再反转回去。
+在promise的例子中，控制流分成了两个部分，触发异步钱的逻辑通过new传入promise，而异步操作完成后的逻辑则传入promise的then接口中，通过这种方式，第一方业务和第三方库的响应逻辑都由primise来调用，进而在promise中解决异步变成可能出现 ## API 一个promise有以下几种状态 * pending: 初始状态，成功或失败状态 * fulfilled: 意味这操作成功完成 * rejected: 意味着操作失败
+</code></pre></div></div>
+
+<p><a href="https://mdn.mozillademos.org/files/8633/promises.png">看这样一张图</a>
+<img src="https://mdn.mozillademos.org/files/8633/promises.png" alt="promise" /></p>
+
+<h3 id="属性">属性</h3>
+<p><code class="highlighter-rouge">Promise.length</code> length属性，其值总是为1（构造器参数的数目）
+<code class="highlighter-rouge">Promise.prototype</code> 表示Promise构造器的原型</p>
+
+<h3 id="方法">方法</h3>
+
+<h4 id="promisealliterable">Promise.all(iterable)</h4>
+<p>用于将多个Promise实例，包装成一个新的Promise实例</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const p = Promise.all([p1, p2, p3]);
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Promise.all方法接受一个数组作为参数，p1, p2, p3都是Promise实例，如果不是，就会调用Promise.resolve方法，转为Promise实例，再进一步处理。（Promise.all方法的参数可以不是数组，但必须具有Iterator接口，且返回的每个成员都是Promise实例）
+p的状态由p1,p2,p3决定，分两种情况
+1. 只有p1, p2, p3的状态都变成fulfilled, p的状态才会变成fulfilled，此时，p1, p2, p3的返回值组成一个数组，传递给p的回调函数
+2. 只要p1, p2, p3之中有一个被rejected，p的状态就变成rejected，此时，第一个被reject的实例的返回值，会传递给p的回掉函数
+</code></pre></div></div>
+
+<p>例子见：./demo/promise.all.1.js</p>
+
+<p>如果作为参数的Promise实例，自己定义了catch方法，那么它一旦被rejected，就不会触发Promise.all的catch方法
+见：./demo/promise.all.2.js</p>
+
+<h4 id="promiseraceiterable">Promise.race(iterable)</h4>
+<p>该方法同样是将多个Promise实例，包装成一个新的Promise实例</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const p = new Promise.race([p1, p2, p3]);
+</code></pre></div></div>
+<p>那么上面代码中，只要p1,p2,p3之中有一个实例率先改变状态，p的状态就跟着改变，那个率先改变状态的promise的返回值，就作为参数传递给p的回掉函数
+如果参数不是Promise的实例，就会调用Promise.resolve方法，转为Promise实例
+见Promise.race.js</p>
+
+<h4 id="promiseresolve">Promise.resolve()</h4>
+<p>有时需要将现有对象转为Promise对象，该方法就起到这个作用</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const jsPromise = Promise.resolve($.ajax('./whatever.json'))
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Promise.resolve('foo');
+// 等价于
+new Promise(resolve =&gt; resolve('foo'))
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Promise.resolve的参数分成四种情况
+（1）参数是一个promise实例
+    如果参数本身就是Promise实例，那么Promise.resolve将不做任何修改，直接返回实例
+（2）参数是一个thenable对象
+    thenable对象值的就是具有then方法的对象
+    let thenable = {
+        then: function(resolve){
+            resolve(1);
+        }
+    }
+    let p1 = Promise.resolve(thenable); //会转换完并执行then方法后在返回
+    p1.then(function(value){
+        console.log(value);  //1
+    })
+    
+（3）参数不是具有then方法的对象，或根本不是对象
+    const p = Promise.resolve('hello');
+    p.then(function(e){
+        console.log(e); //hello
+    })
+
+(4) 不带有任何参数
+    直接返回一个Promise对象，但是需要注意的是，即使是立即执行的，也会排在当前的事件队列后面，是在本轮"事件循环"（event loop）结束时，而不是在下一轮"事件循环"的开始时。
+    setTimeout(function(){
+        console.log('3');
+    }, 0);
+    Promise.resolve().then(function(){
+        console.log(2);
+    });
+    console.log(1);
+    // 1
+    // 2
+    // 3
+    setTimeout(fn, 0)在下一轮"事件循环"开始时执行，
+    Promise.resolve()在本轮 "事件循环" 结束时开始执行
+    console.log('1') 时立即执行
+</code></pre></div></div>
+
+<h4 id="promiserejected">Promise.rejected()</h4>
+<p>Promise.rejected方法也会返沪一个新的Promise实例，该实例的状态为rejected</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const p = new Promise.rejected('出错了')
+// 等价于
+const p = new Promise((resolve, rejected) =&gt; rejected('出错了'))
+</code></pre></div></div>
+<p>那么，Promise.rejected()方法的参数，会原封不动的作为reject的理由，变成后续的参数，这一点与Promise.resolve不一致</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const thenable = {
+    then: function(resolve, reject){
+        reject('出错了');
+    }
+}
+
+Promise.reject(thenable).cathch(e =&gt; {
+    console.log(e === thenable); //true
+})
+
+</code></pre></div></div>
+
+<h2 id="源码重写">源码重写</h2>
+
+<h2 id="参考">参考</h2>
+<p><a href="http://ewind.us/2017/promise-implementing/">promise源码阅读</a></p>
+  
+	</div>
+	<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <!--
+  <%- list_categories(item.categories, {
+      show_count: false,
+      class: 'article-category',
+      style: 'none',
+      separator: '►'
+  }) %>
+  -->
+  
+  <a class="article-category-link" href="/categories/#js">js</a>
+  
+</div>
+
+
+  <div class="article-tags">
+  <!--
+  <% var tags = [];
+    item.tags.forEach(function(tag){
+      tags.push('<a href="' + config.root + tag.path + '">' + tag.name + '</a>');
+    }); %>-->
+  <span></span> <!--<%- tags.join('') %>-->
+  
+  
+  <a href="/tags/#promise">promise</a>
+  
+  <a href="/tags/#源码">源码</a>
+  
+  <a href="/tags/#js">js</a>
+  
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://localhost:4000/js/2019/04/19/promise/" data-title="promise的深入学习 | panpan Shang" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+   
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/css/2019/04/19/position/" title="Position">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Position</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/%E6%B5%8F%E8%A7%88%E5%99%A8/2019/04/19/%E5%8D%95%E7%BA%BF%E7%A8%8B/"  title="Javascript是单线程">
+ <strong>下一篇：</strong><br/> 
+ <span>Javascript是单线程
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+
+      
+      
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside toc-content">
+ 
+ <!--<%- toc(item.content) %>-->
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/#css" title="css">css<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#js" title="js">js<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/#浏览器" title="浏览器">浏览器<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/#原理" title="原理">原理<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#css" title="css">css<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#promise" title="promise">promise<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#源码" title="源码">源码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#js" title="js">js<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/#浏览器" title="浏览器">浏览器<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div id="tagcloud" class="tagcloudlist clearfix">
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            <a href="https://juejin.im/user/589933ff2f301e00697ab55f" target="_blank" title="掘金">掘金</a>
+          </li>
+        
+          <li>
+            <a href="https://segmentfault.com/u/_spp" target="_blank" title="segmentfault">segmentfault</a>
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  
+
+  <div class="rsspart">
+	<a href="" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I am a lovely girl. <br/>
+			This is my blog, 咩～.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+	<!--
+			<%  Array.prototype.S=String.fromCharCode(2);
+			  Array.prototype.in_array=function(e){
+    			var r=new RegExp(this.S+e+this.S);
+    			return (r.test(this.S+this.join(this.S)+this.S));
+				};
+				var cc = new Array('by','by-nc','by-nc-nd','by-nc-sa','by-nd','by-sa','zero'); %>
+		<% if (cc.in_array(theme.creative_commons) ) { %>
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/<%= theme.creative_commons %>/4.0" class="cc-opacity" target="_blank">
+            <img src="<%- config.root %>img/cc-<%= theme.creative_commons %>.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    <% } %>
+				-->
+
+		<p class="copyright">
+		Powered by <a href="http://jekyllrb.com" target="_blank" title="jekyll">jekyll</a> and Theme by <a href="https://github.com/simpleyyt/jekyll-jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="about" target="_blank" title="shangpanpan">shangpanpan</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/assets/js/jquery-2.0.3.min.js"></script>
+<script src="/assets/js/jquery.imagesloaded.min.js"></script>
+<script src="/assets/js/gallery.js"></script>
+<script src="/assets/js/jquery.qrcode-0.12.0.min.js"></script>
+<script src="/assets/js/toc.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+
+  
+
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+});
+</script>
+
+
+<script src="/assets/js/tagcloud.js"></script>
+<script>
+$(document).ready(function() {
+  var tags = [
+    
+    { "name": "原理", "path": "/tags/#原理", "length": 3 },
+    
+    { "name": "css", "path": "/tags/#css", "length": 3 },
+    
+    { "name": "promise", "path": "/tags/#promise", "length": 1 },
+    
+    { "name": "源码", "path": "/tags/#源码", "length": 1 },
+    
+    { "name": "js", "path": "/tags/#js", "length": 1 },
+    
+    { "name": "浏览器", "path": "/tags/#浏览器", "length": 1 },
+    
+  ];
+  $("#tagcloud").html(tagcloudHelper(tags));
+});
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#toc.toc-aside').toc({
+    title: "文章目录",
+    showEffect: "none"
+  });
+  $('#toc.toc-article').toc({
+    title: "文章目录",
+    showEffect: "show",
+    showSpeed: 0
+  });
+});
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+/*
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      //$('.hoverqrcode').hide();
+  });
+  */
+});
+</script>
+
+
+
+
+
+
+<!--
+
+-->
+
+
+
+
+<link rel="stylesheet" href="/assets/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/assets/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      if ($(this).hasClass('emoji')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/assets/img/scrollup.png"/></a>
+	</div>
+	<script src="/assets/js/totop.js"></script>
+
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
