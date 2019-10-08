@@ -469,8 +469,11 @@ $(document).ready(function(){
         show_post(document.location.hash);
     }
     $('a[href*=#]').click(function() {
-        if (this.hash) {
-            show_post(this.hash);
+        // if (this.hash) {
+        //     show_post(this.hash);
+        // }
+		if (this.attr('href')) {
+            show_post(this.attr('href'));
         }
     });
 
