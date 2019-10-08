@@ -430,6 +430,7 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
     var show_post = function(anchor) {
+		anchor = decodeURI(anchor);
         $(".post").hide();
         var cls = anchor.substr(1);
         $("." + cls).show();
@@ -439,8 +440,8 @@ $(document).ready(function(){
         show_post(document.location.hash);
     }
     $('a[href*=#]').click(function() {
-		if (this.attr('href')) {
-            show_post(this.attr('href'));
+		if (this.hash) {
+            show_post(this.hash);
         }
     });
 
